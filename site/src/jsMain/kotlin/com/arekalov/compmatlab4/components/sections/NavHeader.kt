@@ -1,16 +1,14 @@
-package com.arekalov.compmatlab2.components.sections
+package com.arekalov.compmatlab4.components.sections
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.arekalov.compmatlab2.common.CHANGE_THEME_STR
-import com.arekalov.compmatlab4.components.common.GITHUB_URI
-import com.arekalov.compmatlab4.components.common.PAGE_TITLE
-import com.arekalov.compmatlab4.components.components.widgets.IconButton
-import com.arekalov.compmatlab2.components.widgets.RegularText
-import com.arekalov.compmatlab4.components.data.Theme
-import com.arekalov.compmatlab4.components.data.setTheme
-import com.arekalov.compmatlab4.components.toSitePalette
+import com.arekalov.compmatlab4.common.GITHUB_URI
+import com.arekalov.compmatlab4.common.PAGE_TITLE
+import com.arekalov.compmatlab4.common.StringResources.CHANGE_THEME_STR
+import com.arekalov.compmatlab4.toSitePalette
+import com.arekalov.compmatlab4.widgets.AppButton
+import com.arekalov.compmatlab4.widgets.AppText
 import com.varabyte.kobweb.browser.dom.ElementTarget
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -42,12 +40,12 @@ val NavHeaderStyle = CssStyle.base {
 @Composable
 private fun ColorModeButton() {
     var colorMode by ColorMode.currentState
-    IconButton(onClick = {
+    AppButton(onClick = {
         colorMode = colorMode.opposite
         if (colorMode.isLight) {
-            setTheme(Theme.Light)
+//            setTheme(Theme.Light)
         } else {
-            setTheme(Theme.Dark)
+//            setTheme(Theme.Dark)
         }
     }) {
         if (colorMode.isLight) MoonIcon() else SunIcon()
@@ -67,7 +65,7 @@ fun NavHeader() {
             Image("/compmat-logo.png", PAGE_TITLE, Modifier.height(3.cssRem).display(DisplayStyle.Block))
         }
 
-        RegularText(
+        AppText(
             text = "CompMat-lab2",
             color = ColorMode.current.toSitePalette().brand.primary,
             fontSize = 1.5,

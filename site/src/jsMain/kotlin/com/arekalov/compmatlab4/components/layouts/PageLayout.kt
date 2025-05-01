@@ -2,8 +2,8 @@ package com.arekalov.compmatlab4.components.layouts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.arekalov.compmatlab4.components.components.sections.Footer
-import com.arekalov.compmatlab2.components.sections.NavHeader
+import com.arekalov.compmatlab4.components.sections.Footer
+import com.arekalov.compmatlab4.components.sections.NavHeader
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.ColumnScope

@@ -2,7 +2,8 @@ package com.arekalov.compmatlab4.components.sections
 
 import androidx.compose.runtime.Composable
 import com.arekalov.compmatlab4.common.GITHUB_URI
-import com.arekalov.compmatlab4.components.common.GITHUB_URI
+import com.arekalov.compmatlab4.common.StringResources.MADE_BY_STR
+import com.arekalov.compmatlab4.common.StringResources.SOURCE_CODE_STR
 import com.arekalov.compmatlab4.toSitePalette
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.WhiteSpace
