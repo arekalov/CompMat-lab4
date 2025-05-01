@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.arekalov.compmatlab4.approximation.*
+import com.arekalov.compmatlab4.data.GraphManager
 import com.arekalov.compmatlab4.models.ApproximationResult
 import com.arekalov.compmatlab4.models.ApproximationType
 import com.arekalov.compmatlab4.models.Point
@@ -11,6 +12,8 @@ import kotlin.math.pow
 import kotlin.math.round
 
 class ApproximationViewModel {
+    private val graphManager = GraphManager()
+
     // Состояние точек данных
     var points by mutableStateOf<List<Point>>(emptyList())
         private set
@@ -37,6 +40,10 @@ class ApproximationViewModel {
         ApproximationType.POWER to { PowerApproximator() }
     )
 
+    init {
+        graphManager.initGraph()
+    }
+
     // Добавление новой точки
     fun addPoint(x: Double, y: Double) {
         if (points.size >= Approximator.MAX_POINTS) {
@@ -45,6 +52,7 @@ class ApproximationViewModel {
         }
         points = points + Point(x, y)
         errorMessage = null
+        updateGraph()
     }
 
     // Удаление точки по индексу
@@ -52,6 +60,7 @@ class ApproximationViewModel {
         if (index in points.indices) {
             points = points.filterIndexed { i, _ -> i != index }
             errorMessage = null
+            updateGraph()
         }
     }
 
@@ -60,12 +69,14 @@ class ApproximationViewModel {
         points = emptyList()
         result = null
         errorMessage = null
+        graphManager.clearGraph()
     }
 
     // Изменение типа аппроксимации
     fun setApproximationType(type: ApproximationType) {
         selectedType = type
         errorMessage = null
+        updateGraph()
     }
 
     // Выполнение аппроксимации
@@ -81,9 +92,50 @@ class ApproximationViewModel {
 
             result = approximator.approximate(points)
             errorMessage = null
+            updateGraph()
         } catch (e: Exception) {
             errorMessage = e.message ?: "Произошла ошибка при выполнении аппроксимации"
             result = null
+            updateGraph()
+        }
+    }
+
+    // Обновление графика
+    private fun updateGraph() {
+        graphManager.clearGraph()
+        graphManager.plotPoints(points)
+        result?.let {
+            graphManager.plotFunction(getFunctionExpression())
+        }
+    }
+
+    // Получение выражения функции для графика
+    private fun getFunctionExpression(): String {
+        return when (selectedType) {
+            ApproximationType.LINEAR -> {
+                val (a, b) = result?.coefficients ?: return ""
+                "${formatNumber(a)}x + ${formatNumber(b)}"
+            }
+            ApproximationType.POLYNOMIAL_2 -> {
+                val (a0, a1, a2) = result?.coefficients ?: return ""
+                "${formatNumber(a0)} + ${formatNumber(a1)}x + ${formatNumber(a2)}x^2"
+            }
+            ApproximationType.POLYNOMIAL_3 -> {
+                val (a0, a1, a2, a3) = result?.coefficients ?: return ""
+                "${formatNumber(a0)} + ${formatNumber(a1)}x + ${formatNumber(a2)}x^2 + ${formatNumber(a3)}x^3"
+            }
+            ApproximationType.EXPONENTIAL -> {
+                val (a, b) = result?.coefficients ?: return ""
+                "${formatNumber(a)}e^{${formatNumber(b)}x}"
+            }
+            ApproximationType.LOGARITHMIC -> {
+                val (a, b) = result?.coefficients ?: return ""
+                "${formatNumber(a)}\\ln(x) + ${formatNumber(b)}"
+            }
+            ApproximationType.POWER -> {
+                val (a, b) = result?.coefficients ?: return ""
+                "${formatNumber(a)}x^{${formatNumber(b)}}"
+            }
         }
     }
 
