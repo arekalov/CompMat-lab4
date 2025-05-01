@@ -61,7 +61,7 @@ val SubheadlineTextStyle = CssStyle.base {
 }
 
 val CircleButtonVariant = ButtonStyle.addVariantBase {
-    Modifier.padding(0.px).borderRadius(50.percent)
+    Modifier.padding(top = 0.px).borderRadius(30.percent)
 }
 
 val UncoloredButtonVariant = ButtonStyle.addVariantBase {

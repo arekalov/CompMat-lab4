@@ -15,6 +15,7 @@ import com.varabyte.kobweb.silk.theme.colors.palette.color
 class SitePalette(
     val nearBackground: Color,
     val cobweb: Color,
+    val text: Color,
     val brand: Brand,
 ) {
     class Brand(
@@ -26,15 +27,17 @@ class SitePalette(
 object SitePalettes {
     val light = SitePalette(
         nearBackground = Color.rgb(0xF4F6FA),
-        cobweb = Colors.LightGray,
+        cobweb = Color.rgb(230, 230, 230),
+        text = Color.rgb(10, 10, 10),
         brand = SitePalette.Brand(
-            primary = Color.rgb(0x3C83EF),
-            accent = Color.rgb(0xFCBA03),
+            primary = Color.rgb(0x3C83EF).inverted(),
+            accent = Color.rgb(0xF3DB5B).inverted(),
         )
     )
     val dark = SitePalette(
         nearBackground = Color.rgb(0x13171F),
         cobweb = Colors.LightGray.inverted(),
+        text = Color.rgb(200, 200, 200),
         brand = SitePalette.Brand(
             primary = Color.rgb(0x3C83EF),
             accent = Color.rgb(0xF3DB5B),

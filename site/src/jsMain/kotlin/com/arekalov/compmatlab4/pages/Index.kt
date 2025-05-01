@@ -1,132 +1,106 @@
-package com.arekalov.compmatlab4.pages
+package com.arekalov.compmatlab2.pages
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.StyleVariable
-import com.varabyte.kobweb.compose.foundation.layout.Box
-import com.varabyte.kobweb.compose.foundation.layout.Column
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.arekalov.compmatlab4.components.common.PAGE_TITLE
+import com.arekalov.compmatlab4.components.components.layouts.PageLayout
+import com.arekalov.compmatlab2.components.sections.input.InputForm
+import com.arekalov.compmatlab4.components.components.widgets.BorderBox
+import com.arekalov.compmatlab4.components.components.widgets.DesmosGraph
+import com.arekalov.compmatlab2.data.common.SingleEquation
+import com.arekalov.compmatlab4.components.data.initGraph
+import com.arekalov.compmatlab2.ui.SingleAction
+import com.arekalov.compmatlab2.ui.MainViewModel
+import com.arekalov.compmatlab2.ui.SystemAction
+import com.arekalov.compmatlab2.ui.model.Method
+import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.graphics.Color
-import com.varabyte.kobweb.compose.ui.graphics.Colors
-import com.varabyte.kobweb.compose.ui.modifiers.*
-import com.varabyte.kobweb.compose.ui.toAttrs
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.height
+import com.varabyte.kobweb.compose.ui.modifiers.width
 import com.varabyte.kobweb.core.Page
-import com.varabyte.kobweb.core.rememberPageContext
-import com.varabyte.kobweb.silk.components.forms.Button
-import com.varabyte.kobweb.silk.components.navigation.Link
-import com.varabyte.kobweb.silk.components.text.SpanText
-import com.varabyte.kobweb.silk.style.CssStyle
-import com.varabyte.kobweb.silk.style.base
-import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
-import com.varabyte.kobweb.silk.style.breakpoint.displayIfAtLeast
-import com.varabyte.kobweb.silk.style.toAttrs
-import com.varabyte.kobweb.silk.style.toModifier
-import com.varabyte.kobweb.silk.theme.colors.ColorMode
-import com.varabyte.kobweb.silk.theme.colors.ColorPalettes
 import org.jetbrains.compose.web.css.cssRem
-import org.jetbrains.compose.web.css.fr
-import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.css.vh
-import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
-import com.arekalov.compmatlab4.HeadlineTextStyle
-import com.arekalov.compmatlab4.SubheadlineTextStyle
-import com.arekalov.compmatlab4.components.layouts.PageLayout
-import com.arekalov.compmatlab4.toSitePalette
-
-// Container that has a tagline and grid on desktop, and just the tagline on mobile
-val HeroContainerStyle = CssStyle {
-    base { Modifier.fillMaxWidth().gap(2.cssRem) }
-    Breakpoint.MD { Modifier.margin { top(20.vh) } }
-}
-
-// A demo grid that appears on the homepage because it looks good
-val HomeGridStyle = CssStyle.base {
-    Modifier
-        .gap(0.5.cssRem)
-        .width(70.cssRem)
-        .height(18.cssRem)
-}
-
-private val GridCellColorVar by StyleVariable<Color>()
-val HomeGridCellStyle = CssStyle.base {
-    Modifier
-        .backgroundColor(GridCellColorVar.value())
-        .boxShadow(blurRadius = 0.6.cssRem, color = GridCellColorVar.value())
-        .borderRadius(1.cssRem)
-}
-
-@Composable
-private fun GridCell(color: Color, row: Int, column: Int, width: Int? = null, height: Int? = null) {
-    Div(
-        HomeGridCellStyle.toModifier()
-            .setVariable(GridCellColorVar, color)
-            .gridItem(row, column, width, height)
-            .toAttrs()
-    )
-}
 
 @Page
 @Composable
-fun HomePage() {
-    PageLayout("Home") {
-        Row(HeroContainerStyle.toModifier()) {
-            Box {
-                val sitePalette = ColorMode.current.toSitePalette()
+fun Index() {
+    val viewModel by remember { mutableStateOf(MainViewModel()) }
+    val singleState = viewModel.singleState.collectAsState().value
+    val systemState = viewModel.systemState.collectAsState().value
 
-                Column(Modifier.gap(2.cssRem)) {
-                    Div(HeadlineTextStyle.toAttrs()) {
-                        SpanText(
-                            "Use this template as your starting point for ", Modifier.color(
-                                when (ColorMode.current) {
-                                    ColorMode.LIGHT -> Colors.Black
-                                    ColorMode.DARK -> Colors.White
-                                }
-                            )
-                        )
-                        SpanText(
-                            "Kobweb",
-                            Modifier
-                                .color(sitePalette.brand.accent)
-                                // Use a shadow so this light-colored word is more visible in light mode
-                                .textShadow(0.px, 0.px, blurRadius = 0.5.cssRem, color = Colors.Gray)
-                        )
-                    }
+    val onAChanged = remember { { value: Double? -> viewModel.reduce(SingleAction.ChangeA(value)) } }
+    val onBChanged = remember { { value: Double? -> viewModel.reduce(SingleAction.ChangeB(value)) } }
+    val onEquationChanged = remember { { value: SingleEquation -> viewModel.reduce(SingleAction.ChangeEquation(value)) } }
+    val onSingleMethodChanged = remember { { method: String -> viewModel.reduce(SingleAction.ChangeMethod(method)) } }
 
-                    Div(SubheadlineTextStyle.toAttrs()) {
-                        SpanText("You can read the ")
-                        Link("/about", "About")
-                        SpanText(" page for more information.")
-                    }
+    val onXChanged = remember { { value: Double? -> viewModel.reduce(SystemAction.ChangeX(value)) } }
+    val onYChanged = remember { { value: Double? -> viewModel.reduce(SystemAction.ChangeY(value)) } }
+    val onFirstEquationChanged =
+        remember { { value: SingleEquation -> viewModel.reduce(SystemAction.ChangeFirstEquation(value)) } }
+    val onSecondEquationChanged =
+        remember { { value: SingleEquation -> viewModel.reduce(SystemAction.ChangeSecondEquation(value)) } }
+    val onSystemMethodChanged =
+        remember { { method: Method -> viewModel.reduce(SystemAction.ChangeMethod(method)) } }
 
-                    val ctx = rememberPageContext()
-                    Button(onClick = {
-                        // Change this click handler with your call-to-action behavior
-                        // here. Link to an order page? Open a calendar UI? Play a movie?
-                        // Up to you!
-                        ctx.router.tryRoutingTo("/about")
-                    }, colorPalette = ColorPalettes.Blue) {
-                        Text("This could be your CTA")
-                    }
-                }
+    val onSolvedSystemClicked = remember { { viewModel.reduce(SystemAction.Calculate) } }
+    val onSolvedSingleClicked = remember { { viewModel.reduce(SingleAction.Calculate) } }
+    var isSingleMode by remember { mutableStateOf(true) }
+
+    PageLayout(
+        title = PAGE_TITLE
+    ) {
+        LaunchedEffect(Unit) {
+            initGraph()
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(0.5.cssRem)
+        ) {
+            BorderBox {
+                InputForm(
+                    singleState = singleState,
+                    systemState = systemState,
+                    onAChanged = onAChanged,
+                    onBChanged = onBChanged,
+                    onSolvedClicked = if (isSingleMode) {
+                        onSolvedSingleClicked
+                    } else {
+                        onSolvedSystemClicked
+                    },
+                    onEquationChanged = onEquationChanged,
+                    onFirstEquationChanged = onFirstEquationChanged,
+                    onSecondEquationChanged = onSecondEquationChanged,
+                    onXChanged = onXChanged,
+                    onYChanged = onYChanged,
+                    isSingleMode = isSingleMode,
+                    onSingleModeChanged = { value -> isSingleMode = value },
+                    onSingleEqMethodChanged = onSingleMethodChanged,
+                    onSystemMethodChanged = onSystemMethodChanged,
+                )
             }
-
-            Div(HomeGridStyle
-                .toModifier()
-                .displayIfAtLeast(Breakpoint.MD)
-                .grid {
-                    rows { repeat(3) { size(1.fr) } }
-                    columns { repeat(5) {size(1.fr) } }
-                }
-                .toAttrs()
+            DesmosGraph(
+                width = 45f,
+                height = 40f,
+            )
+            BorderBox(
+                modifier = Modifier
+                    .width(30.cssRem)
+                    .height(23.5.cssRem)
             ) {
-                val sitePalette = ColorMode.current.toSitePalette()
-                GridCell(sitePalette.brand.primary, 1, 1, 2, 2)
-                GridCell(ColorPalettes.Monochrome._600, 1, 3)
-                GridCell(ColorPalettes.Monochrome._100, 1, 4, width = 2)
-                GridCell(sitePalette.brand.accent, 2, 3, width = 2)
-                GridCell(ColorPalettes.Monochrome._300, 2, 5)
-                GridCell(ColorPalettes.Monochrome._800, 3, 1, width = 5)
+                Text(
+                    if (isSingleMode) {
+                        singleState.solution.toString()
+                    } else {
+                        systemState.solution.toString()
+                    }
+                )
             }
         }
     }
