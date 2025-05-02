@@ -8,4 +8,5 @@ expect class GraphManager() {
     fun plotPoints(points: List<Point>)
     fun plotFunction(expression: String)
     fun setTheme(isDark: Boolean)
+    fun jsLog(value: String)
 } 

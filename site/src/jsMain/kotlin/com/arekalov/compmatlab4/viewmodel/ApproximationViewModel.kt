@@ -112,7 +112,8 @@ class ApproximationViewModel {
         graphManager.clearGraph()
         graphManager.plotPoints(points)
         bestResult?.let {
-            graphManager.plotFunction(getFunctionExpression(it))
+            graphManager.jsLog(getFunctionExpression(it))
+            graphManager.plotFunction("y=" + getFunctionExpression(it))
         }
     }
 

@@ -20,7 +20,7 @@ actual class GraphManager {
                     """
                     new Desmos.GraphingCalculator(elt, {
                         invertedColors: true,
-                        expressions: false,
+                        expressions: true,
                         settingsMenu: false,
                     })
                 """
@@ -39,7 +39,7 @@ actual class GraphManager {
         calculator?.setExpression(js("""
             {
                 id: "points",
-                latex: "pointsStr",
+                latex: "",
                 style: "points",
                 color: "#C37C10"
             }
@@ -47,16 +47,22 @@ actual class GraphManager {
     }
 
     actual fun plotFunction(expression: String) {
+        jsLog(expression)
         calculator?.setExpression(js("""
-            {
-                id: "function",
-                latex: "y = expression",
-                color: "#0C24A4"
-            }
-        """))
+        {
+            id: "expressionId",
+            latex: expression
+        }
+    """))
+
     }
 
     actual fun setTheme(isDark: Boolean) {
         calculator?.updateSettings(js("{'invertedColors': isDark}"))
     }
+
+    actual fun jsLog(value: String) {
+        js("console.log(value)")
+    }
+
 } 
