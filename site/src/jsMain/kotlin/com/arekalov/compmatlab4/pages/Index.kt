@@ -19,7 +19,8 @@ import org.jetbrains.compose.web.css.*
 fun Index() {
     val viewModel = ApproximationViewModel()
     PageLayout(
-        title = PAGE_TITLE
+        title = PAGE_TITLE,
+        onThemeChanged = viewModel::setTheme,
     ) {
         Row(
             modifier = Modifier

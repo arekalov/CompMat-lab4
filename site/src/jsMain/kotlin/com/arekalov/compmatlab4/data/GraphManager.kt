@@ -42,19 +42,19 @@ actual class GraphManager {
         calculator?.setExpression(js("""
             {
                 id: "points",
-                latex: "",
+                latex: pointsStr,
                 style: "points",
-                color: "#C37C10"
+                color: "#0C24A4"
             }
         """))
     }
 
     actual fun plotFunction(expression: String) {
-        jsLog(expression)
         calculator?.setExpression(js("""
         {
             id: "expressionId",
-            latex: expression
+            latex: expression,
+            color: "#C37C10"
         }
     """))
 

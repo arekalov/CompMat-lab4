@@ -38,14 +38,16 @@ val NavHeaderStyle = CssStyle.base {
 }
 
 @Composable
-private fun ColorModeButton() {
+private fun ColorModeButton(
+    onThemeChanged: (isDark: Boolean) -> Unit,
+) {
     var colorMode by ColorMode.currentState
     AppButton(onClick = {
         colorMode = colorMode.opposite
         if (colorMode.isLight) {
-//            setTheme(Theme.Light)
+            onThemeChanged(false)
         } else {
-//            setTheme(Theme.Dark)
+            onThemeChanged(true)
         }
     }) {
         if (colorMode.isLight) MoonIcon() else SunIcon()
@@ -54,7 +56,9 @@ private fun ColorModeButton() {
 }
 
 @Composable
-fun NavHeader() {
+fun NavHeader(
+    onThemeChanged: (isDark: Boolean) -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -74,7 +78,7 @@ fun NavHeader() {
 
         Spacer()
         Row(Modifier.gap(1.5.cssRem).displayIfAtLeast(Breakpoint.MD), verticalAlignment = Alignment.CenterVertically) {
-            ColorModeButton()
+            ColorModeButton(onThemeChanged = onThemeChanged)
         }
     }
 }

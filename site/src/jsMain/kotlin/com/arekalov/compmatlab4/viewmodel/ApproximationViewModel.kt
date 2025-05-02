@@ -44,6 +44,10 @@ class ApproximationViewModel {
         graphManager.initGraph()
     }
 
+    fun setTheme(isDark: Boolean) {
+        graphManager.setTheme(isDark)
+    }
+
     // Добавление новой точки
     fun addPoint(x: Double, y: Double) {
         if (points.size >= Approximator.MAX_POINTS) {

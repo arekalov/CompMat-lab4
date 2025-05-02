@@ -22,7 +22,11 @@ val PageContentStyle = CssStyle {
 }
 
 @Composable
-fun PageLayout(title: String, content: @Composable ColumnScope.() -> Unit) {
+fun PageLayout(
+    title: String,
+    onThemeChanged: (isDark: Boolean) -> Unit,
+    content: @Composable ColumnScope.() -> Unit
+) {
     LaunchedEffect(title) {
         document.title = title
     }
@@ -38,7 +42,7 @@ fun PageLayout(title: String, content: @Composable ColumnScope.() -> Unit) {
             Modifier.fillMaxSize().gridRow(1),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            NavHeader()
+            NavHeader(onThemeChanged = onThemeChanged)
             Div(PageContentStyle.toAttrs()) {
                 content()
             }
