@@ -77,7 +77,7 @@ fun DataInputSection(
                                 }
                                 viewModel.performApproximation()
                             } catch (e: Exception) {
-                                viewModel.errorMessage = "Ошибка при парсинге данных: ${e.message}"
+                                viewModel.errorMessage = "${StringResources.ERROR_PARSE} ${e.message}"
                             }
                         },
                         modifier = Modifier.weight(1f)
@@ -102,21 +102,21 @@ fun DataInputSection(
                     .width(20.cssRem)
                     .padding(1.cssRem)
             ) {
-                AppText("Формат:", fontSize = 1.2)
+                AppText(StringResources.INPUT_FORMAT_LABEL, fontSize = 1.2)
                 Column(
                     modifier = Modifier
                         .padding(top = 0.5.cssRem)
                 ) {
-                    AppSecondaryText("Формат")
-                    AppSecondaryText("x y")
-                    AppSecondaryText("x y")
+                    AppSecondaryText(StringResources.INPUT_FORMAT_HINT)
+                    AppSecondaryText(StringResources.INPUT_FORMAT_ROW)
+                    AppSecondaryText(StringResources.INPUT_FORMAT_ROW)
                     AppSecondaryText("")
-                    AppSecondaryText("Например:")
+                    AppSecondaryText(StringResources.INPUT_FORMAT_EXAMPLE)
                     AppSecondaryText("1.0 2.5")
                     AppSecondaryText("2.0 3.7")
-                    AppSecondaryText("\n")
-                    AppSecondaryText("Min 8 точек")
-                    AppSecondaryText("Max 12 точек")
+                    AppSecondaryText("")
+                    AppSecondaryText(StringResources.INPUT_FORMAT_MIN)
+                    AppSecondaryText(StringResources.INPUT_FORMAT_MAX)
                 }
             }
         }

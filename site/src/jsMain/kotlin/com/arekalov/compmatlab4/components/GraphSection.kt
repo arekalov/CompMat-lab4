@@ -1,6 +1,7 @@
 package com.arekalov.compmatlab4.components
 
 import androidx.compose.runtime.Composable
+import com.arekalov.compmatlab4.common.StringResources
 import com.arekalov.compmatlab4.components.widgets.BorderBox
 import com.arekalov.compmatlab4.widgets.*
 import com.varabyte.kobweb.compose.foundation.layout.Arrangement
@@ -21,7 +22,7 @@ fun GraphSection(
             verticalArrangement = Arrangement.spacedBy(1.cssRem),
             modifier = Modifier.fillMaxSize()
         ) {
-            AppText("График", fontSize = 1.5)
+            AppText(StringResources.GRAPH_TITLE, fontSize = 1.5)
             
             Box(
                 modifier = Modifier

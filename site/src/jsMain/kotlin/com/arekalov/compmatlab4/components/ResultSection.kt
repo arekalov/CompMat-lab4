@@ -14,6 +14,7 @@ import com.varabyte.kobweb.compose.ui.graphics.Color as kobwebColor
 import org.jetbrains.compose.web.css.*
 import kotlin.math.pow
 import kotlin.math.round
+import com.arekalov.compmatlab4.common.StringResources
 
 @Composable
 fun ResultSection(
@@ -25,7 +26,7 @@ fun ResultSection(
             verticalArrangement = Arrangement.spacedBy(1.cssRem),
             modifier = modifier.fillMaxWidth()
         ) {
-            AppText("Результаты", fontSize = 1.5)
+            AppText(StringResources.RESULT_TITLE, fontSize = 1.5)
 
             if (viewModel.allResults.isNotEmpty()) {
                 // Выводим результаты для каждого типа аппроксимации
@@ -48,19 +49,19 @@ fun ResultSection(
                             .borderRadius(0.5.cssRem)
                     ) {
                         AppText(
-                            "Наилучшая аппроксимация: ${bestResult.type}",
+                            "${StringResources.BEST_APPROX_LABEL} ${bestResult.type}",
                             fontSize = 1.2,
                             color = AppColors.Success
                         )
                         AppSecondaryText(
-                            "Мера отклонения: ${formatNumber(bestResult.deviation)}",
+                            "${StringResources.DEVIATION_LABEL} ${formatNumber(bestResult.deviation)}",
                             modifier = Modifier.padding(top = 0.5.cssRem)
                         )
                     }
                 }
             } else {
                 AppSecondaryText(
-                    "Введите данные и нажмите 'Вычислить'",
+                    StringResources.NO_RESULTS_MESSAGE,
                     modifier = Modifier.padding(1.cssRem)
                 )
             }
@@ -94,34 +95,34 @@ private fun ResultItem(
         )
 
         AppSecondaryText(
-            "Коэффициенты: ${result.coefficients.joinToString(", ") { formatNumber(it) }}",
+            "${StringResources.COEFFICIENTS_LABEL} ${result.coefficients.joinToString(", ") { formatNumber(it) }}",
             modifier = Modifier.padding(top = 0.25.cssRem)
         )
 
         AppSecondaryText(
-            "Среднеквадратичное отклонение: ${formatNumber(result.meanSquareError)}",
+            "${StringResources.MEAN_SQUARE_ERROR_LABEL} ${formatNumber(result.meanSquareError)}",
             modifier = Modifier.padding(top = 0.25.cssRem)
         )
 
         AppSecondaryText(
-            "Мера отклонения: ${formatNumber(result.deviation)}",
+            "${StringResources.DEVIATION_LABEL} ${formatNumber(result.deviation)}",
             modifier = Modifier.padding(top = 0.25.cssRem)
         )
 
         result.pearsonCorrelation?.let { correlation ->
             AppSecondaryText(
-                "Коэффициент корреляции Пирсона: ${formatNumber(correlation)}",
+                "${StringResources.PEARSON_LABEL} ${formatNumber(correlation)}",
                 modifier = Modifier.padding(top = 0.25.cssRem)
             )
         }
 
         AppSecondaryText(
-            "Коэффициент детерминации: ${formatNumber(result.determinationCoefficient)}",
+            "${StringResources.DETERMINATION_LABEL} ${formatNumber(result.determinationCoefficient)}",
             modifier = Modifier.padding(top = 0.25.cssRem)
         )
 
         AppSecondaryText(
-            "Точность аппроксимации: ${result.approximationQuality}",
+            "${StringResources.QUALITY_LABEL} ${result.approximationQuality}",
             modifier = Modifier.padding(top = 0.25.cssRem)
         )
     }

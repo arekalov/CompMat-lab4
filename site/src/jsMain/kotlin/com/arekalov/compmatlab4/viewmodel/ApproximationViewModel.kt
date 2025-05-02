@@ -10,6 +10,7 @@ import com.arekalov.compmatlab4.models.ApproximationType
 import com.arekalov.compmatlab4.models.Point
 import kotlin.math.pow
 import kotlin.math.round
+import com.arekalov.compmatlab4.common.StringResources
 
 class ApproximationViewModel {
     private val graphManager = GraphManager()
@@ -54,7 +55,7 @@ class ApproximationViewModel {
     // Добавление новой точки
     fun addPoint(x: Double, y: Double) {
         if (points.size >= Approximator.MAX_POINTS) {
-            errorMessage = "Достигнуто максимальное количество точек (${Approximator.MAX_POINTS})"
+            errorMessage = StringResources.ERROR_MAX_POINTS
             return
         }
         points = points + Point(x, y)
@@ -84,7 +85,7 @@ class ApproximationViewModel {
     fun performApproximation() {
         try {
             if (points.size < Approximator.MIN_POINTS) {
-                errorMessage = "Необходимо ввести минимум ${Approximator.MIN_POINTS} точек"
+                errorMessage = StringResources.ERROR_MIN_POINTS
                 return
             }
 
@@ -107,7 +108,7 @@ class ApproximationViewModel {
             errorMessage = null
             updateGraph()
         } catch (e: Exception) {
-            errorMessage = e.message ?: "Произошла ошибка при выполнении аппроксимации"
+            errorMessage = e.message ?: StringResources.ERROR_GENERIC
             allResults = emptyMap()
             bestResult = null
             updateGraph()
