@@ -53,7 +53,7 @@ fun ResultSection(
                             color = AppColors.Success
                         )
                         AppSecondaryText(
-                            "Коэффициент детерминации: ${formatNumber(bestResult.determinationCoefficient)}",
+                            "Мера отклонения: ${formatNumber(bestResult.deviation)}",
                             modifier = Modifier.padding(top = 0.5.cssRem)
                         )
                     }

@@ -102,7 +102,7 @@ fun DataInputSection(
                     .width(20.cssRem)
                     .padding(1.cssRem)
             ) {
-                AppText("Формат ввода данных:", fontSize = 1.2)
+                AppText("Формат:", fontSize = 1.2)
                 Column(
                     modifier = Modifier
                         .padding(top = 0.5.cssRem)

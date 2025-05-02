@@ -101,8 +101,8 @@ class ApproximationViewModel {
 
             allResults = results
 
-            // Находим наилучшую аппроксимацию по коэффициенту детерминации
-            bestResult = results.maxByOrNull { it.value.determinationCoefficient }?.value
+            // Находим наилучшую аппроксимацию по мере отклонения (минимальное значение)
+            bestResult = results.minByOrNull { it.value.deviation }?.value
 
             errorMessage = null
             updateGraph()
