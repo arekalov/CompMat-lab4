@@ -28,7 +28,7 @@ class ApproximationViewModel {
 
     // Сообщение об ошибке
     var errorMessage by mutableStateOf<String?>(null)
-        private set
+        internal set
 
     // Фабрика аппроксиматоров
     private val approximatorFactory = mapOf(
