@@ -2,6 +2,7 @@ package com.arekalov.compmatlab4.components
 
 import androidx.compose.runtime.Composable
 import com.arekalov.compmatlab4.components.widgets.BorderBox
+import com.arekalov.compmatlab4.models.ApproximationResult
 import com.arekalov.compmatlab4.viewmodel.ApproximationViewModel
 import com.arekalov.compmatlab4.widgets.AppColors
 import com.arekalov.compmatlab4.widgets.AppSecondaryText
@@ -25,39 +26,38 @@ fun ResultSection(
         ) {
             AppText("Результаты", fontSize = 1.5)
 
-            viewModel.result?.let { result ->
-                // Функция
-                ResultItem("Функция", viewModel.getFunctionString())
-
-                // Коэффициенты
-                ResultItem(
-                    "Коэффициенты",
-                    result.coefficients.joinToString(", ") { formatNumber(it) }
-                )
-
-                // Статистика
-                ResultItem(
-                    "Среднеквадратичное отклонение",
-                    formatNumber(result.meanSquareError)
-                )
-
-                result.pearsonCorrelation?.let { correlation ->
+            if (viewModel.allResults.isNotEmpty()) {
+                // Выводим результаты для каждого типа аппроксимации
+                viewModel.allResults.forEach { (type, result) ->
                     ResultItem(
-                        "Коэффициент корреляции Пирсона",
-                        formatNumber(correlation)
+                        title = type.toString(),
+                        result = result,
+                        isBest = result == viewModel.bestResult,
+                        viewModel = viewModel
                     )
                 }
 
-                ResultItem(
-                    "Коэффициент детерминации",
-                    formatNumber(result.determinationCoefficient)
-                )
-
-                ResultItem(
-                    "Качество аппроксимации",
-                    if (result.isGoodFit) "Хорошее" else "Недостаточное"
-                )
-            } ?: run {
+                // Выводим итоговый результат
+                viewModel.bestResult?.let { bestResult ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .backgroundColor(AppColors.Surface)
+                            .padding(1.cssRem)
+                            .borderRadius(0.5.cssRem)
+                    ) {
+                        AppText(
+                            "Наилучшая аппроксимация: ${bestResult.type}",
+                            fontSize = 1.2,
+                            color = AppColors.Success
+                        )
+                        AppSecondaryText(
+                            "Коэффициент детерминации: ${formatNumber(bestResult.determinationCoefficient)}",
+                            modifier = Modifier.padding(top = 0.5.cssRem)
+                        )
+                    }
+                }
+            } else {
                 AppSecondaryText(
                     "Введите данные и нажмите 'Вычислить'",
                     modifier = Modifier.padding(1.cssRem)
@@ -69,18 +69,55 @@ fun ResultSection(
 
 @Composable
 private fun ResultItem(
-    label: String,
-    value: String
+    title: String,
+    result: ApproximationResult,
+    isBest: Boolean,
+    viewModel: ApproximationViewModel
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .backgroundColor(AppColors.Surface)
+            .backgroundColor(if (isBest) AppColors.Surface else Color.transparent)
             .padding(0.75.cssRem)
             .borderRadius(0.5.cssRem)
     ) {
-        AppSecondaryText(label)
-        AppText(value)
+        AppText(
+            title,
+            fontSize = 1.1,
+            color = if (isBest) AppColors.Success else AppColors.Primary
+        )
+        
+        AppSecondaryText(
+            viewModel.getFunctionString(result),
+            modifier = Modifier.padding(top = 0.25.cssRem)
+        )
+
+        AppSecondaryText(
+            "Коэффициенты: ${result.coefficients.joinToString(", ") { formatNumber(it) }}",
+            modifier = Modifier.padding(top = 0.25.cssRem)
+        )
+
+        AppSecondaryText(
+            "Среднеквадратичное отклонение: ${formatNumber(result.meanSquareError)}",
+            modifier = Modifier.padding(top = 0.25.cssRem)
+        )
+
+        result.pearsonCorrelation?.let { correlation ->
+            AppSecondaryText(
+                "Коэффициент корреляции Пирсона: ${formatNumber(correlation)}",
+                modifier = Modifier.padding(top = 0.25.cssRem)
+            )
+        }
+
+        AppSecondaryText(
+            "Коэффициент детерминации: ${formatNumber(result.determinationCoefficient)}",
+            modifier = Modifier.padding(top = 0.25.cssRem)
+        )
+
+        AppSecondaryText(
+            "Качество аппроксимации: ${if (result.isGoodFit) "Хорошее" else "Недостаточное"}",
+            modifier = Modifier.padding(top = 0.25.cssRem)
+        )
     }
 }
 

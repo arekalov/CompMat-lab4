@@ -35,11 +35,11 @@ actual class GraphManager {
     }
 
     actual fun plotPoints(points: List<Point>) {
-        val value = {points.joinToString(",") { "(${it.x},${it.y})"}}
+        val pointsStr = points.joinToString(",") { "(${it.x},${it.y})" }
         calculator?.setExpression(js("""
             {
                 id: "points",
-                latex: "value",
+                latex: "pointsStr",
                 style: "points",
                 color: "#C37C10"
             }

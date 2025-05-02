@@ -18,12 +18,12 @@ class ApproximationViewModel {
     var points by mutableStateOf<List<Point>>(emptyList())
         private set
 
-    // Выбранный тип аппроксимации
-    var selectedType by mutableStateOf<ApproximationType>(ApproximationType.LINEAR)
+    // Результаты всех типов аппроксимации
+    var allResults by mutableStateOf<Map<ApproximationType, ApproximationResult>>(emptyMap())
         private set
 
-    // Результат аппроксимации
-    var result by mutableStateOf<ApproximationResult?>(null)
+    // Наилучший результат
+    var bestResult by mutableStateOf<ApproximationResult?>(null)
         private set
 
     // Сообщение об ошибке
@@ -67,16 +67,10 @@ class ApproximationViewModel {
     // Очистка всех точек
     fun clearPoints() {
         points = emptyList()
-        result = null
+        allResults = emptyMap()
+        bestResult = null
         errorMessage = null
         graphManager.clearGraph()
-    }
-
-    // Изменение типа аппроксимации
-    fun setApproximationType(type: ApproximationType) {
-        selectedType = type
-        errorMessage = null
-        updateGraph()
     }
 
     // Выполнение аппроксимации
@@ -87,15 +81,28 @@ class ApproximationViewModel {
                 return
             }
 
-            val approximator = approximatorFactory[selectedType]?.invoke()
-                ?: throw IllegalStateException("Неподдерживаемый тип аппроксимации: $selectedType")
+            // Вычисляем все типы аппроксимации
+            val results = mutableMapOf<ApproximationType, ApproximationResult>()
+            approximatorFactory.forEach { (type, factory) ->
+                try {
+                    val approximator = factory()
+                    results[type] = approximator.approximate(points)
+                } catch (e: Exception) {
+                    // Пропускаем типы аппроксимации, которые не подходят для данных
+                }
+            }
 
-            result = approximator.approximate(points)
+            allResults = results
+
+            // Находим наилучшую аппроксимацию по коэффициенту детерминации
+            bestResult = results.maxByOrNull { it.value.determinationCoefficient }?.value
+
             errorMessage = null
             updateGraph()
         } catch (e: Exception) {
             errorMessage = e.message ?: "Произошла ошибка при выполнении аппроксимации"
-            result = null
+            allResults = emptyMap()
+            bestResult = null
             updateGraph()
         }
     }
@@ -104,69 +111,69 @@ class ApproximationViewModel {
     private fun updateGraph() {
         graphManager.clearGraph()
         graphManager.plotPoints(points)
-        result?.let {
-            graphManager.plotFunction(getFunctionExpression())
+        bestResult?.let {
+            graphManager.plotFunction(getFunctionExpression(it))
         }
     }
 
     // Получение выражения функции для графика
-    private fun getFunctionExpression(): String {
-        return when (selectedType) {
+    private fun getFunctionExpression(result: ApproximationResult): String {
+        return when (result.type) {
             ApproximationType.LINEAR -> {
-                val (a, b) = result?.coefficients ?: return ""
+                val (a, b) = result.coefficients
                 "${formatNumber(a)}x + ${formatNumber(b)}"
             }
             ApproximationType.POLYNOMIAL_2 -> {
-                val (a0, a1, a2) = result?.coefficients ?: return ""
+                val (a0, a1, a2) = result.coefficients
                 "${formatNumber(a0)} + ${formatNumber(a1)}x + ${formatNumber(a2)}x^2"
             }
             ApproximationType.POLYNOMIAL_3 -> {
-                val (a0, a1, a2, a3) = result?.coefficients ?: return ""
+                val (a0, a1, a2, a3) = result.coefficients
                 "${formatNumber(a0)} + ${formatNumber(a1)}x + ${formatNumber(a2)}x^2 + ${formatNumber(a3)}x^3"
             }
             ApproximationType.EXPONENTIAL -> {
-                val (a, b) = result?.coefficients ?: return ""
+                val (a, b) = result.coefficients
                 "${formatNumber(a)}e^{${formatNumber(b)}x}"
             }
             ApproximationType.LOGARITHMIC -> {
-                val (a, b) = result?.coefficients ?: return ""
+                val (a, b) = result.coefficients
                 "${formatNumber(a)}\\ln(x) + ${formatNumber(b)}"
             }
             ApproximationType.POWER -> {
-                val (a, b) = result?.coefficients ?: return ""
+                val (a, b) = result.coefficients
                 "${formatNumber(a)}x^{${formatNumber(b)}}"
             }
         }
     }
 
     // Получение функции для построения графика
-    fun getFunction(): ((Double) -> Double)? = result?.function
+    fun getFunction(): ((Double) -> Double)? = bestResult?.function
 
     // Получение строкового представления функции
-    fun getFunctionString(): String {
-        return when (selectedType) {
+    fun getFunctionString(result: ApproximationResult): String {
+        return when (result.type) {
             ApproximationType.LINEAR -> {
-                val (a, b) = result?.coefficients ?: return ""
+                val (a, b) = result.coefficients
                 "y = ${formatNumber(a)}x + ${formatNumber(b)}"
             }
             ApproximationType.POLYNOMIAL_2 -> {
-                val (a0, a1, a2) = result?.coefficients ?: return ""
+                val (a0, a1, a2) = result.coefficients
                 "y = ${formatNumber(a0)} + ${formatNumber(a1)}x + ${formatNumber(a2)}x²"
             }
             ApproximationType.POLYNOMIAL_3 -> {
-                val (a0, a1, a2, a3) = result?.coefficients ?: return ""
+                val (a0, a1, a2, a3) = result.coefficients
                 "y = ${formatNumber(a0)} + ${formatNumber(a1)}x + ${formatNumber(a2)}x² + ${formatNumber(a3)}x³"
             }
             ApproximationType.EXPONENTIAL -> {
-                val (a, b) = result?.coefficients ?: return ""
+                val (a, b) = result.coefficients
                 "y = ${formatNumber(a)}e^(${formatNumber(b)}x)"
             }
             ApproximationType.LOGARITHMIC -> {
-                val (a, b) = result?.coefficients ?: return ""
+                val (a, b) = result.coefficients
                 "y = ${formatNumber(a)}ln(x) + ${formatNumber(b)}"
             }
             ApproximationType.POWER -> {
-                val (a, b) = result?.coefficients ?: return ""
+                val (a, b) = result.coefficients
                 "y = ${formatNumber(a)}x^${formatNumber(b)}"
             }
         }
