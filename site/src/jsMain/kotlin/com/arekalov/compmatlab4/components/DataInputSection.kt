@@ -71,6 +71,10 @@ fun DataInputSection(
                                         val (x, y) = line.trim().split("\\s+".toRegex())
                                         Point(x.toDouble(), y.toDouble())
                                     }
+                                if (points.size > com.arekalov.compmatlab4.approximation.Approximator.MAX_POINTS) {
+                                    viewModel.errorMessage = com.arekalov.compmatlab4.common.StringResources.ERROR_MAX_POINTS
+                                    return@AppButton
+                                }
                                 viewModel.clearPoints()
                                 points.forEach { point ->
                                     viewModel.addPoint(point.x, point.y)
