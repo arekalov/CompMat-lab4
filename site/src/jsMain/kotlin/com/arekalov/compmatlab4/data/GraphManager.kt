@@ -22,6 +22,9 @@ actual class GraphManager {
                         invertedColors: true,
                         expressions: true,
                         settingsMenu: false,
+                        expressionsCollapsed: true,
+                        zoomButtons: false,
+                        border: false
                     })
                 """
                 )

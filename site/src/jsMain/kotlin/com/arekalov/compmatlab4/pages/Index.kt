@@ -1,10 +1,13 @@
 package com.arekalov.compmatlab4.pages
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import com.arekalov.compmatlab4.common.PAGE_TITLE
-import com.arekalov.compmatlab4.components.*
+import com.arekalov.compmatlab4.components.DataInputSection
+import com.arekalov.compmatlab4.components.GraphSection
+import com.arekalov.compmatlab4.components.ResultSection
 import com.arekalov.compmatlab4.components.layouts.PageLayout
 import com.arekalov.compmatlab4.viewmodel.ApproximationViewModel
+import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.*
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.*
@@ -14,40 +17,39 @@ import org.jetbrains.compose.web.css.*
 @Page
 @Composable
 fun Index() {
-    PageLayout(title = PAGE_TITLE) {
-        val viewModel = remember { ApproximationViewModel() }
-
-        Column(
+    val viewModel = ApproximationViewModel()
+    PageLayout(
+        title = PAGE_TITLE
+    ) {
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(2.cssRem),
-            verticalArrangement = Arrangement.spacedBy(1.cssRem)
+                .fillMaxHeight()
+                .padding(1.cssRem),
+            horizontalArrangement = Arrangement.spacedBy(1.cssRem)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(1.cssRem)
+            // Левая колонка с вводом данных и результатами
+            Column(
+                modifier = Modifier
+                    .width(40.cssRem)
+                    .fillMaxHeight()
+                    .overflow(Overflow.Auto),
+                verticalArrangement = Arrangement.spacedBy(1.cssRem)
             ) {
-                // Левая секция - ввод данных
-                DataInputSection(
-                    modifier = Modifier
-                        .width(30.cssRem)
-                        .fillMaxHeight(),
-                    viewModel = viewModel
-                )
+                DataInputSection(viewModel = viewModel)
+                ResultSection(viewModel = viewModel)
+            }
 
-                // Центральная секция - график
+            // Правая колонка с графиком
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.cssRem)
+            ) {
                 GraphSection(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                )
-
-                // Правая секция - результаты
-                ResultSection(
-                    modifier = Modifier
-                        .width(30.cssRem)
+                        .fillMaxWidth()
                         .fillMaxHeight(),
-                    viewModel = viewModel
                 )
             }
         }

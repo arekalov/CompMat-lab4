@@ -107,18 +107,16 @@ fun DataInputSection(
                     modifier = Modifier
                         .padding(top = 0.5.cssRem)
                 ) {
-                    AppSecondaryText("Введите координаты точек в формате:")
-                    AppSecondaryText("x y")
+                    AppSecondaryText("Формат")
                     AppSecondaryText("x y")
                     AppSecondaryText("x y")
                     AppSecondaryText("")
                     AppSecondaryText("Например:")
                     AppSecondaryText("1.0 2.5")
                     AppSecondaryText("2.0 3.7")
-                    AppSecondaryText("3.0 4.2")
-                    AppSecondaryText("")
-                    AppSecondaryText("Минимум 8 точек")
-                    AppSecondaryText("Максимум 12 точек")
+                    AppSecondaryText("\n")
+                    AppSecondaryText("Min 8 точек")
+                    AppSecondaryText("Max 12 точек")
                 }
             }
         }

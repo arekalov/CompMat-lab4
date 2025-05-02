@@ -26,7 +26,7 @@ fun GraphSection(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(30.cssRem)
+                    .fillMaxHeight()
             ) {
                 Div(
                     attrs = {
