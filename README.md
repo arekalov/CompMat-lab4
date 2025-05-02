@@ -54,3 +54,7 @@
 2. Открыть [http://localhost:8080](http://localhost:8080)
 3. Для выхода нажать `Q`
 
+## Демо
+![preview_1.png](docs/imgs/preview_1.png)
+![preview_2.png](docs/imgs/preview_2.png)
+![preview_3.png](docs/imgs/preview_3.png)
