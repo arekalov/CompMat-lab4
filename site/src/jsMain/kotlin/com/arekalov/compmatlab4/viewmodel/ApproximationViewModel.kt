@@ -100,10 +100,20 @@ class ApproximationViewModel {
                 }
             }
 
-            allResults = results
+            // Фильтруем некорректные аппроксимации
+            val filteredResults = results.filterValues { result ->
+                result.coefficients.all { it.isFinite() } &&
+                result.determinationCoefficient.isFinite() &&
+                result.meanSquareError.isFinite() &&
+                result.deviation.isFinite() &&
+                (result.pearsonCorrelation?.isFinite() ?: true) &&
+                // Проверяем значения функции на исходных точках
+                points.all { p -> result.function(p.x).isFinite() }
+            }
+            allResults = filteredResults
 
             // Находим наилучшую аппроксимацию по мере отклонения (минимальное значение)
-            bestResult = results.minByOrNull { it.value.deviation }?.value
+            bestResult = filteredResults.minByOrNull { it.value.deviation }?.value
 
             errorMessage = null
             updateGraph()
