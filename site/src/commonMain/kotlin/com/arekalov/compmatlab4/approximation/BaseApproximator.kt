@@ -20,6 +20,13 @@ abstract class BaseApproximator : Approximator {
         return sqrt(sumSquaredErrors / points.size)
     }
 
+    protected fun calculateDeviation(points: List<Point>, function: (Double) -> Double): Double {
+        return points.sumOf { (x, y) ->
+            val predicted = function(x)
+            (predicted - y).pow(2)
+        }
+    }
+
     protected fun calculateDeterminationCoefficient(points: List<Point>, function: (Double) -> Double): Double {
         val meanY = points.map { it.y }.average()
         val totalSum = points.sumOf { (it.y - meanY).pow(2) }

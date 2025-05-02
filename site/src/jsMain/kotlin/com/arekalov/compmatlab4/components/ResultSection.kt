@@ -103,6 +103,11 @@ private fun ResultItem(
             modifier = Modifier.padding(top = 0.25.cssRem)
         )
 
+        AppSecondaryText(
+            "Мера отклонения: ${formatNumber(result.deviation)}",
+            modifier = Modifier.padding(top = 0.25.cssRem)
+        )
+
         result.pearsonCorrelation?.let { correlation ->
             AppSecondaryText(
                 "Коэффициент корреляции Пирсона: ${formatNumber(correlation)}",

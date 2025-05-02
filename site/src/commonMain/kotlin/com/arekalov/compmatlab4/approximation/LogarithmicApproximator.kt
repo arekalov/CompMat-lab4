@@ -34,6 +34,7 @@ class LogarithmicApproximator : BaseApproximator() {
             type = type,
             coefficients = listOf(a, b),
             meanSquareError = calculateMeanSquareError(points, function),
+            deviation = calculateDeviation(points, function),
             pearsonCorrelation = null,
             determinationCoefficient = calculateDeterminationCoefficient(points, function),
             function = function

@@ -49,6 +49,7 @@ class PolynomialApproximator(
             type = type,
             coefficients = coefficients.toList(),
             meanSquareError = calculateMeanSquareError(points, function),
+            deviation = calculateDeviation(points, function),
             pearsonCorrelation = null,
             determinationCoefficient = calculateDeterminationCoefficient(points, function),
             function = function

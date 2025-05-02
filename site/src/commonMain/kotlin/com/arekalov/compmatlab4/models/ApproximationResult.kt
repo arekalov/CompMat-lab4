@@ -4,6 +4,7 @@ data class ApproximationResult(
     val type: ApproximationType,
     val coefficients: List<Double>,
     val meanSquareError: Double,
+    val deviation: Double,
     val pearsonCorrelation: Double? = null, // Только для линейной аппроксимации
     val determinationCoefficient: Double,
     val function: (Double) -> Double
@@ -19,6 +20,7 @@ data class ApproximationResult(
             Тип аппроксимации: $type
             Коэффициенты: [$coefficientsStr]
             Среднеквадратичное отклонение: $meanSquareError
+            Мера отклонения: $deviation
             ${pearsonCorrelation?.let { "Коэффициент корреляции Пирсона: $it" } ?: ""}
             Коэффициент детерминации: $determinationCoefficient
             Качество аппроксимации: ${if (isGoodFit) "хорошее" else "недостаточное"}
