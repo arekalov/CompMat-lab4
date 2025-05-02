@@ -30,6 +30,8 @@ class ApproximationViewModel {
     var errorMessage by mutableStateOf<String?>(null)
         internal set
 
+    var isDarkTheme by mutableStateOf(true)
+
     // Фабрика аппроксиматоров
     private val approximatorFactory = mapOf(
         ApproximationType.LINEAR to { LinearApproximator() },
@@ -45,6 +47,7 @@ class ApproximationViewModel {
     }
 
     fun setTheme(isDark: Boolean) {
+        isDarkTheme = isDark
         graphManager.setTheme(isDark)
     }
 
@@ -115,9 +118,13 @@ class ApproximationViewModel {
     private fun updateGraph() {
         graphManager.clearGraph()
         graphManager.plotPoints(points)
-        bestResult?.let {
-            graphManager.jsLog(getFunctionExpression(it))
-            graphManager.plotFunction("y=" + getFunctionExpression(it))
+        
+        // Отображаем все функции
+        allResults.forEach { (type, result) ->
+            graphManager.plotFunction(
+                expression = getFunctionExpression(result),
+                color = if (isDarkTheme) type.invertedColor else type.color
+            )
         }
     }
 

@@ -10,6 +10,7 @@ import com.arekalov.compmatlab4.widgets.AppText
 import com.varabyte.kobweb.compose.foundation.layout.*
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.*
+import com.varabyte.kobweb.compose.ui.graphics.Color as kobwebColor
 import org.jetbrains.compose.web.css.*
 import kotlin.math.pow
 import kotlin.math.round
@@ -22,7 +23,7 @@ fun ResultSection(
     BorderBox(modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(1.cssRem),
-            modifier = Modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth()
         ) {
             AppText("Результаты", fontSize = 1.5)
 
@@ -84,7 +85,7 @@ private fun ResultItem(
         AppText(
             title,
             fontSize = 1.1,
-            color = if (isBest) AppColors.Success else AppColors.Primary
+            color = kobwebColor.rgb(result.type.colorInt)
         )
         
         AppSecondaryText(
