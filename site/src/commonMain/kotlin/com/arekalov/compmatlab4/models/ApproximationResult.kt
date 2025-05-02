@@ -9,8 +9,16 @@ data class ApproximationResult(
     val determinationCoefficient: Double,
     val function: (Double) -> Double
 ) {
+    val approximationQuality: String
+        get() = when {
+            determinationCoefficient >= 0.95 -> "высокая"
+            determinationCoefficient >= 0.75 -> "удовлетворительная"
+            determinationCoefficient >= 0.5 -> "низкая"
+            else -> "недостаточная"
+        }
+
     val isGoodFit: Boolean
-        get() = determinationCoefficient > 0.7
+        get() = determinationCoefficient >= 0.75
 
     fun evaluate(x: Double): Double = function(x)
 
@@ -23,7 +31,7 @@ data class ApproximationResult(
             Мера отклонения: $deviation
             ${pearsonCorrelation?.let { "Коэффициент корреляции Пирсона: $it" } ?: ""}
             Коэффициент детерминации: $determinationCoefficient
-            Качество аппроксимации: ${if (isGoodFit) "хорошее" else "недостаточное"}
+            Качество аппроксимации: $approximationQuality
         """.trimIndent()
     }
 }

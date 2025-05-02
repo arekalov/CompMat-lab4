@@ -121,7 +121,7 @@ private fun ResultItem(
         )
 
         AppSecondaryText(
-            "Качество аппроксимации: ${if (result.isGoodFit) "Хорошее" else "Недостаточное"}",
+            "Точность аппроксимации: ${result.approximationQuality}",
             modifier = Modifier.padding(top = 0.25.cssRem)
         )
     }
