@@ -49,12 +49,13 @@ actual class GraphManager {
         """))
     }
 
-    actual fun plotFunction(expression: String, color: String) {
+    actual fun plotFunction(expression: String, color: String, hidden: Boolean) {
         calculator?.setExpression(js("""
         {
             id: expression,
             latex: expression,
-            color: color
+            color: color,
+            hidden: hidden
         }
     """))
     }
@@ -66,5 +67,4 @@ actual class GraphManager {
     actual fun jsLog(value: String) {
         js("console.log(value)")
     }
-
 } 

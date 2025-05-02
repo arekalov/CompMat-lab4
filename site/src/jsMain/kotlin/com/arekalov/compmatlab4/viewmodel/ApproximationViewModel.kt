@@ -122,6 +122,7 @@ class ApproximationViewModel {
         // Отображаем все функции
         allResults.forEach { (type, result) ->
             graphManager.plotFunction(
+                hidden = result != bestResult,
                 expression = getFunctionExpression(result),
                 color = if (isDarkTheme) type.invertedColor else type.color
             )
