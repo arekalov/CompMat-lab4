@@ -1,0 +1,16 @@
+flowchart TD
+    A(("Начало")) --> B[/"Ввод points: List<Point>, degree: Int"/]
+    B --> C{"points.size in 8..12?"}
+    C -->|"Нет"| D["throw IllegalArgumentException"]
+    C -->|"Да"| E{"degree in 2..3?"}
+    E -->|"Нет"| F["throw IllegalArgumentException"]
+    E -->|"Да"| G["val matrix = Array(degree + 1) { DoubleArray(degree + 2) }"]
+    G --> H{{"i = 0..degree"}}
+    H -->|"i <= degree"| I["for (j in 0..degree) {\n    matrix[i][j] = points.sumOf { it.x.pow(i + j) }\n}\nmatrix[i][degree + 1] = points.sumOf { it.y * it.x.pow(i) }"]
+    I --> J["i++"]
+    J --> H
+    H -->|"i > degree"| K["val coefficients = solveGauss(matrix)"]
+    K --> L["val function = { x -> coefficients.mapIndexed { power, coef -> coef * x.pow(power) }.sum() }"]
+    L --> M["val meanSquareError = calculateMeanSquareError(points, function)\nval deviation = calculateDeviation(points, function)\nval determinationCoefficient = calculateDeterminationCoefficient(points, function)"]
+    M --> N["return ApproximationResult(type, coefficients.toList(), meanSquareError, deviation, null, determinationCoefficient, function)"]
+    N --> O(("Конец"))

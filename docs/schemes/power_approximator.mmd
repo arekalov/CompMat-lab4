@@ -1,0 +1,13 @@
+flowchart TD
+    A(("Начало")) --> B[/"Ввод points: List<Point>"/]
+    B --> C{"points.size in 8..12?"}
+    C -->|"Нет"| D["throw IllegalArgumentException"]
+    C -->|"Да"| E["val transformedPoints = points.map { Point(ln(it.x), ln(it.y)) }"]
+    E --> F["val sumLnX = transformedPoints.sumOf { it.x }\nval sumLnY = transformedPoints.sumOf { it.y }\nval sumLnXLnY = transformedPoints.sumOf { it.x * it.y }\nval sumLnX2 = transformedPoints.sumOf { it.x * it.x }"]
+    F --> G["val determinant = sumLnX2 * n - sumLnX * sumLnX"]
+    G --> H["val b = (sumLnXLnY * n - sumLnX * sumLnY) / determinant\nval lnA = (sumLnX2 * sumLnY - sumLnX * sumLnXLnY) / determinant"]
+    H --> I["val a = exp(lnA)"]
+    I --> J["val function = { x -> a * x.pow(b) }"]
+    J --> K["val meanSquareError = calculateMeanSquareError(points, function)\nval deviation = calculateDeviation(points, function)\nval determinationCoefficient = calculateDeterminationCoefficient(points, function)"]
+    K --> L["return ApproximationResult(type, listOf(a, b), meanSquareError, deviation, null, determinationCoefficient, function)"]
+    L --> M(("Конец"))
