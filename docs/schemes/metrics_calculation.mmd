@@ -1,42 +1,54 @@
 flowchart TD
+    %% Схема для функции sumOf
+    subgraph SUM["sumOf { ... }"]
+        SUM_A(("Начало")) --> SUM_B[/"Ввод коллекции и лямбда-функции"/]
+        SUM_B --> SUM_C["var sum = 0.0"]
+        SUM_C --> SUM_D{{"Для каждого элемента"}}
+        SUM_D -->|"Есть элементы"| SUM_E["Применяем лямбда-функцию\nк текущему элементу"]
+        SUM_E --> SUM_F["Добавляем результат\nк сумме"]
+        SUM_F --> SUM_D
+        SUM_D -->|"Нет элементов"| SUM_G["Возврат sum"]
+        SUM_G --> SUM_H(("Конец"))
+    end
+
     %% Схема для calculateMeanSquareError
     subgraph MSE["calculateMeanSquareError"]
         MSE_A(("Начало")) --> MSE_B[/"Ввод points: List<Point>, function: (Double) -> Double"/]
-        MSE_B --> MSE_C["val n = points.size"]
-        MSE_C --> MSE_D["val sumSquaredDiff = points.sumOf { point ->\n    val diff = point.y - function(point.x)\n    diff * diff\n}"]
-        MSE_D --> MSE_E[/"return sqrt(sumSquaredDiff / n)"/]
+        MSE_B --> MSE_C[" n = points.size"]
+        MSE_C --> MSE_D[" sumSquaredDiff = points.sumOf { point ->\n     diff = point.y - function(point.x)\n    diff * diff\n}"]
+        MSE_D --> MSE_E[/"Возврат sqrt(sumSquaredDiff / n)"/]
         MSE_E --> MSE_F(("Конец"))
     end
 
     %% Схема для calculateDeviation
     subgraph DEV["calculateDeviation"]
         DEV_A(("Начало")) --> DEV_B[/"Ввод points: List<Point>, function: (Double) -> Double"/]
-        DEV_B --> DEV_C["val n = points.size"]
-        DEV_C --> DEV_D["val sumAbsDiff = points.sumOf { point ->\n    abs(point.y - function(point.x))\n}"]
-        DEV_D --> DEV_E[/"return sumAbsDiff / n"/]
+        DEV_B --> DEV_C[" n = points.size"]
+        DEV_C --> DEV_D[" sumAbsDiff = points.sumOf { point ->\n    abs(point.y - function(point.x))\n}"]
+        DEV_D --> DEV_E[/"Возврат sumAbsDiff / n"/]
         DEV_E --> DEV_F(("Конец"))
     end
 
     %% Схема для calculateDeterminationCoefficient
     subgraph DET["calculateDeterminationCoefficient"]
         DET_A(("Начало")) --> DET_B[/"Ввод points: List<Point>, function: (Double) -> Double"/]
-        DET_B --> DET_C["val n = points.size"]
-        DET_C --> DET_D["val meanY = points.sumOf { it.y } / n"]
-        DET_D --> DET_E["val totalSumSquares = points.sumOf { point ->\n    val diff = point.y - meanY\n    diff * diff\n}"]
-        DET_E --> DET_F["val residualSumSquares = points.sumOf { point ->\n    val diff = point.y - function(point.x)\n    diff * diff\n}"]
-        DET_F --> DET_G[/"return 1 - (residualSumSquares / totalSumSquares)"/]
+        DET_B --> DET_C[" n = points.size"]
+        DET_C --> DET_D[" meanY = points.sumOf { it.y } / n"]
+        DET_D --> DET_E[" totalSumSquares = points.sumOf { point ->\n     diff = point.y - meanY\n    diff * diff\n}"]
+        DET_E --> DET_F[" residualSumSquares = points.sumOf { point ->\n     diff = point.y - function(point.x)\n    diff * diff\n}"]
+        DET_F --> DET_G[/"Возврат 1 - (residualSumSquares / totalSumSquares)"/]
         DET_G --> DET_H(("Конец"))
     end
 
     %% Схема для calculatePearsonCorrelation
     subgraph PEAR["calculatePearsonCorrelation"]
         PEAR_A(("Начало")) --> PEAR_B[/"Ввод points: List<Point>"/]
-        PEAR_B --> PEAR_C["val n = points.size"]
-        PEAR_C --> PEAR_D["val meanX = points.sumOf { it.x } / n"]
-        PEAR_D --> PEAR_E["val meanY = points.sumOf { it.y } / n"]
-        PEAR_E --> PEAR_F["val numerator = points.sumOf { point ->\n    (point.x - meanX) * (point.y - meanY)\n}"]
-        PEAR_F --> PEAR_G["val denominatorX = sqrt(points.sumOf { point ->\n    val diff = point.x - meanX\n    diff * diff\n})"]
-        PEAR_G --> PEAR_H["val denominatorY = sqrt(points.sumOf { point ->\n    val diff = point.y - meanY\n    diff * diff\n})"]
-        PEAR_H --> PEAR_I[/"return numerator / (denominatorX * denominatorY)"/]
+        PEAR_B --> PEAR_C[" n = points.size"]
+        PEAR_C --> PEAR_D[" meanX = points.sumOf { it.x } / n"]
+        PEAR_D --> PEAR_E[" meanY = points.sumOf { it.y } / n"]
+        PEAR_E --> PEAR_F[" numerator = points.sumOf { point ->\n    (point.x - meanX) * (point.y - meanY)\n}"]
+        PEAR_F --> PEAR_G[" denominatorX = sqrt(points.sumOf { point ->\n     diff = point.x - meanX\n    diff * diff\n})"]
+        PEAR_G --> PEAR_H[" denominatorY = sqrt(points.sumOf { point ->\n     diff = point.y - meanY\n    diff * diff\n})"]
+        PEAR_H --> PEAR_I[/"Возврат numerator / (denominatorX * denominatorY)"/]
         PEAR_I --> PEAR_J(("Конец"))
     end 

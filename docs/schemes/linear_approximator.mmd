@@ -1,11 +1,11 @@
 flowchart TD
-    A(("Начало")) --> B[/"Ввод points: List<Point>"/]
-    B --> C{"points.size in 8..12?"}
+    A(("Начало")) --> B[/"Ввод points"/]
+    B --> C{"8 <= points.size <= 12"}
     C -->|"Нет"| D["throw IllegalArgumentException"]
-    C -->|"Да"| E["val sumX = points.sumOf { it.x }\nval sumY = points.sumOf { it.y }\nval sumXY = points.sumOf { it.x * it.y }\nval sumX2 = points.sumOf { it.x * it.x }"]
-    E --> F["val determinant = sumX2 * n - sumX * sumX"]
-    F --> G["val a = (sumXY * n - sumX * sumY) / determinant\nval b = (sumX2 * sumY - sumX * sumXY) / determinant"]
-    G --> H["val function = { x -> a * x + b }"]
-    H --> I["val meanSquareError = calculateMeanSquareError(points, function)\nval deviation = calculateDeviation(points, function)\nval pearsonCorrelation = calculatePearsonCorrelation(points)\nval determinationCoefficient = calculateDeterminationCoefficient(points, function)"]
-    I --> J["return ApproximationResult(type, listOf(a, b), meanSquareError, deviation, pearsonCorrelation, determinationCoefficient, function)"]
+    C -->|"Да"| E[" sumX = points.sumOf { it.x }\n sumY = points.sumOf { it.y }\n sumXY = points.sumOf { it.x * it.y }\n sumX2 = points.sumOf { it.x * it.x }"]
+    E --> F["determinant = sumX2 * n - sumX * sumX"]
+    F --> G["a = (sumXY * n - sumX * sumY) / determinant\n b = (sumX2 * sumY - sumX * sumXY) / determinant"]
+    G --> H["function = { x -> a * x + b }"]
+    H --> I["meanSquareError = calculateMeanSquareError(points, function)\n deviation = calculateDeviation(points, function)\n pearsonCorrelation = calculatePearsonCorrelation(points)\n determinationCoefficient = calculateDeterminationCoefficient(points, function)"]
+    I --> J["Возврат ApproximationResult"]
     J --> K(("Конец"))

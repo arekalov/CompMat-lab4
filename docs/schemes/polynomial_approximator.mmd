@@ -1,16 +1,15 @@
 flowchart TD
-    A(("Начало")) --> B[/"Ввод points: List<Point>, degree: Int"/]
-    B --> C{"points.size in 8..12?"}
+    A(("Начало")) --> B[/"Ввод points"/]
+    B --> C{"8 <= points.size <= 12"}
     C -->|"Нет"| D["throw IllegalArgumentException"]
-    C -->|"Да"| E{"degree in 2..3?"}
+    C -->|"Да"| E{"2 <= degree <= 3"}
     E -->|"Нет"| F["throw IllegalArgumentException"]
-    E -->|"Да"| G["val matrix = Array(degree + 1) { DoubleArray(degree + 2) }"]
-    G --> H{{"i = 0..degree"}}
-    H -->|"i <= degree"| I["for (j in 0..degree) {\n    matrix[i][j] = points.sumOf { it.x.pow(i + j) }\n}\nmatrix[i][degree + 1] = points.sumOf { it.y * it.x.pow(i) }"]
+    E -->|"Да"| G[" matrix = Array(degree + 1) { DoubleArray(degree + 2) }"]
+    G --> H{{"0 <= i <= degree"}}
+    H -->|"i <= degree"| I["matrix[i][j] = points.sumOf { it.x.pow(i + j) }"]
     I --> J["i++"]
     J --> H
-    H -->|"i > degree"| K["val coefficients = solveGauss(matrix)"]
-    K --> L["val function = { x -> coefficients.mapIndexed { power, coef -> coef * x.pow(power) }.sum() }"]
-    L --> M["val meanSquareError = calculateMeanSquareError(points, function)\nval deviation = calculateDeviation(points, function)\nval determinationCoefficient = calculateDeterminationCoefficient(points, function)"]
-    M --> N["return ApproximationResult(type, coefficients.toList(), meanSquareError, deviation, null, determinationCoefficient, function)"]
+    H -->|"i > degree"| K[" coefficients = solveGauss(matrix)"]
+    K --> M[" meanSquareError = calculateMeanSquareError(points, function)\n deviation = calculateDeviation(points, function)\n determinationCoefficient = calculateDeterminationCoefficient(points, function)"]
+    M --> N["Возврат ApproximationResult"]
     N --> O(("Конец"))

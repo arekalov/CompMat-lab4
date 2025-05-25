@@ -10,7 +10,6 @@ import com.arekalov.compmatlab4.widgets.AppColors
 import com.arekalov.compmatlab4.widgets.AppSecondaryText
 import com.arekalov.compmatlab4.widgets.AppText
 import com.varabyte.kobweb.compose.foundation.layout.*
-import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.*
 import com.varabyte.kobweb.compose.ui.toAttrs
